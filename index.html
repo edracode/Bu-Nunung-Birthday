@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barakallah Fii Umrik, Ibu Guru</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        :root {
+            --primary-bg: #FFF5F5; /* Soft pink/warm white */
+            --card-bg: rgba(255, 255, 255, 0.65);
+            --text-dark: #4A3026; /* Warm dark brown */
+            --accent: #D48C81; /* Soft rose/peach */
+            --accent-hover: #C0756A;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #FFF5F5 0%, #FBE4E4 100%);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .serif {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Glassmorphism Card Style */
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+            margin: 20px auto;
+            max-width: 800px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Music Button */
+        #musicBtn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(212, 140, 129, 0.4);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #musicBtn:hover {
+            transform: scale(1.1);
+            background: var(--accent-hover);
+        }
+
+        /* Sections */
+        section {
+            padding: 60px 20px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Hero Section */
+        #hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        #hero i {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        #hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            min-height: 80px; /* Space for typing effect */
+        }
+
+        #hero p {
+            font-size: 1.1rem;
+            max-width: 600px;
+            color: #6D4C41;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Main Message */
+        .message-content p {
+            margin-bottom: 15px;
+            text-align: justify;
+            font-size: 1.05rem;
+        }
+
+        .message-content h2 {
+            text-align: center;
+            color: var(--accent);
+            margin-bottom: 25px;
+            font-size: 2rem;
+        }
+
+        /* Interactive Buttons */
+        .btn-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn-surprise {
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px solid var(--accent);
+            color: var(--accent);
+            padding: 15px;
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-surprise:hover {
+            background: var(--accent);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        /* Timeline */
+        .timeline-container {
+            border-left: 3px solid var(--accent);
+            padding-left: 20px;
+            margin-left: 10px;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -28px;
+            top: 0;
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            background: var(--accent);
+        }
+
+        /* Gallery */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .gallery-item {
+            background: #e8d5d1;
+            height: 150px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            transition: transform 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+        }
+
+        /* Alternating Messages */
+        .msg-box {
+            text-align: center;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-style: italic;
+            font-size: 1.2rem;
+            color: var(--accent-hover);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            position: relative;
+            animation: zoomIn 0.3s ease;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px; right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #aaa;
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 60px 20px;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            #hero h1 { font-size: 2rem; }
+            .glass-card { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="bgMusic" loop>
+        <source src="https://cdn.pixabay.com/download/audio/2022/05/16/audio_b200b39673.mp3?filename=soft-piano-100-bpm-121529.mp3" type="audio/mpeg">
+    </audio>
+
+    <button id="musicBtn" onclick="toggleMusic()">
+        <i class="fas fa-volume-mute" id="musicIcon"></i>
+    </button>
+
+    <section id="hero" class="visible">
+        <i class="fas fa-book-open"></i>
+        <h1 id="typewriter"></h1>
+        <p>Sebuah persembahan kecil yang sederhana, namun tulus dari hati, teruntuk guru yang sangat menginspirasi.</p>
+        <br>
+        <i class="fas fa-chevron-down" style="font-size: 1.5rem; color: #aaa; animation: float 2s infinite;"></i>
+    </section>
+
+    <section id="main-card">
+        <div class="glass-card message-content">
+            <h2 class="serif"><i class="fas fa-heart" style="font-size: 1.5rem;"></i> Surat Untuk Ibu <i class="fas fa-heart" style="font-size: 1.5rem;"></i></h2>
+            <p>Assalamu’alaikum Warahmatullahi Wabarakatuh,</p>
+            <p><strong>Barakallah fii umrik, Ibu Nunung🥰</strong></p>
+            <p>Seperti ilmu Sosiologi yang Ibu ajarkan tentang makna di balik setiap interaksi manusia, Ibu juga telah memberikan makna yang begitu berharga dalam perjalanan belajar saya.</p>
+            <p>Bagi saya pribadi, Ibu bukan sekadar pendidik yang memaparkan teori atau struktur masyarakat di depan kelas. Lebih dari itu, Ibu adalah sosok yang menuntun saya untuk melihat dunia dengan kacamata empati, memahami keberagaman dengan lebih bijak, dan mengajarkan saya bagaimana memanusiakan manusia.</p>
+            <p>Di hari yang istimewa ini, izinkan saya memanjatkan doa terbaik untuk Ibu. Semoga Allah SWT senantiasa merengkuh langkah Ibu dengan kesehatan, melimpahkan kebahagiaan yang tak terputus, dan memberikan keberkahan di setiap detik usia Ibu. Semoga setiap tetes keringat dan keikhlasan Ibu dalam mendidik saya menjadi amal jariyah yang cahayanya terus mengalir.</p>
+            <p>Terima kasih atas segala kesabaran, kelembutan, dan ilmu yang Ibu berikan. Saya merasa sangat bersyukur bisa menjadi salah satu murid yang Ibu bimbing.</p>
+            <p>Selamat bertambah usia, Ibu. Teruslah menjadi cahaya yang menginspirasi.</p>
+            <p>Wassalamu’alaikum Warahmatullahi Wabarakatuh.</p>
+        </div>
+    </section>
+
+    <section id="interactive">
+        <div class="glass-card">
+            <h3 class="serif" style="text-align: center; margin-bottom: 10px;">Sentuh Hati di Bawah Ini</h3>
+            <p style="text-align: center; font-size: 0.9rem; color: #666;">Silakan klik tombol-tombol di bawah untuk membuka kejutan kecil.</p>
+            <div class="btn-grid">
+                <button class="btn-surprise" onclick="showSurprise('Terima Kasih, Ibu Guru!', 'Terima kasih telah menjadi arsitek peradaban di ruang kelas kami yang tidak hanya membentuk kami menjadi pintar, tetapi juga beradab.', 'confetti')">
+                    <i class="fas fa-chalkboard-teacher"></i> Terima Kasih
+                </button>
+                <button class="btn-surprise" onclick="showSurprise('Doa Tulus', 'Semoga Ibu senantiasa dilindungi Allah, dimudahkan segala urusannya, dan diberkahi rezekinya.', 'stars')">
+                    <i class="fas fa-praying-hands"></i> Doa untuk Guru
+                </button>
+                <button class="btn-surprise" onclick="showSurprise('Kenangan Indah', 'Setiap diskusi kelas, senyum ramah, dan nasihat Ibu adalah kenangan berharga yang akan selalu saya bawa hingga dewasa kelak.', 'balloons')">
+                    <i class="fas fa-camera-retro"></i> Kenangan Indah
+                </button>
+                <button class="btn-surprise" onclick="showSurprise('Kado Virtual', '🎁 Walau hanya kado virtual, semoga doa di dalamnya sampai dengan nyata ke hati Ibu. Selamat ulang tahun!', 'gifts')">
+                    <i class="fas fa-gift"></i> Harapan Spesial
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <section id="quotes">
+        <div class="glass-card">
+            <div class="msg-box serif" id="dynamicMessage">
+                "Guru yang hebat adalah dia yang menginspirasi muridnya."
+            </div>
+        </div>
+    </section>
+
+    <section id="memories">
+        <div class="glass-card">
+            <h3 class="serif" style="margin-bottom: 20px;"><i class="fas fa-history"></i> Jejak Berharga</h3>
+            <div class="timeline-container">
+                <div class="timeline-item">
+                    <strong>Pelajaran Kehidupan</strong>
+                    <p style="font-size: 0.9rem; color: #666;">Bukan sekadar buku teks, Ibu mengajarkan realitas sosial.</p>
+                </div>
+                <div class="timeline-item">
+                    <strong>Kesabaran Ekstra</strong>
+                    <p style="font-size: 0.9rem; color: #666;">Momen saat Ibu dengan sabar menjawab pertanyaan-pertanyaan kami di kelas.</p>
+                </div>
+                <div class="timeline-item">
+                    <strong>Hari Ini</strong>
+                    <p style="font-size: 0.9rem; color: #666;">Merayakan hari kelahiran sosok yang luar biasa.</p>
+                </div>
+            </div>
+
+            <h3 class="serif" style="margin-top: 40px; margin-bottom: 20px;"><i class="fas fa-images"></i> Galeri Memori</h3>
+            <div class="gallery-grid">
+                <div class="gallery-item"><i class="fas fa-image"></i></div>
+                <div class="gallery-item"><i class="fas fa-image"></i></div>
+                <div class="gallery-item"><i class="fas fa-image"></i></div>
+            </div>
+            <p style="text-align: center; font-size: 0.8rem; margin-top: 10px; color: #888;">*Tempat Spesial untuk guru Spesial</p>
+        </div>
+    </section>
+
+    <footer>
+        <h2 class="serif" style="color: var(--accent); margin-bottom: 15px;">Semoga Selalu Bahagia</h2>
+        <p style="max-width: 600px; margin: 0 auto 20px; font-size: 1.05rem;">
+            "Ya Allah, panjangkanlah umur guru kami dalam ketaatan kepada-Mu, sehatkanlah badannya, terangilah hatinya, tetapkanlah imannya, luaskanlah rezekinya, dan dekatkanlah beliau pada kebaikan."
+        </p>
+        <p class="serif" style="font-size: 1.2rem; font-weight: 600;">Dengan penuh hormat dan takzim,</p>
+        <br>
+        <p class="serif" style="font-size: 1.5rem; color: var(--accent);">Muridmu, Edra</p>
+    </footer>
+
+    <div id="surpriseModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle" class="serif" style="color: var(--accent); margin-bottom: 15px;"></h2>
+            <p id="modalText"></p>
+        </div>
+    </div>
+
+    <script>
+        // 1. Typewriter Effect
+        const text = "Barakallah Fii Umrik, Ibu Guru...";
+        let i = 0;
+        const speed = 100;
+        
+        function typeWriter() {
+            if (i < text.length) {
+                document.getElementById("typewriter").innerHTML += text.charAt(i);
+                i++;
+                setTimeout(typeWriter, speed);
+            }
+        }
+        
+        window.onload = () => {
+            setTimeout(typeWriter, 500);
+        };
+
+        // 2. Scroll Animation (Intersection Observer)
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('section').forEach((section) => {
+            observer.observe(section);
+        });
+
+        // 3. Audio Toggle
+        const audio = document.getElementById("bgMusic");
+        const musicIcon = document.getElementById("musicIcon");
+        let isPlaying = false;
+
+        function toggleMusic() {
+            if (isPlaying) {
+                audio.pause();
+                musicIcon.classList.remove("fa-volume-up");
+                musicIcon.classList.add("fa-volume-mute");
+            } else {
+                audio.play();
+                musicIcon.classList.remove("fa-volume-mute");
+                musicIcon.classList.add("fa-volume-up");
+            }
+            isPlaying = !isPlaying;
+        }
+
+        // 4. Alternating Messages
+        const messages = [
+            '"Sosiologi mengajarkan kita tentang manusia, Ibu mengajarkan saya cara menjadi manusia yang lebih baik."',
+            '"Semoga hari ini secerah senyuman yang selalu Ibu berikan di kelas."',
+            '"Pahlawan tanpa tanda jasa yang selalu kami banggakan."',
+            '"Terima kasih untuk ilmu yang tak ternilai harganya."'
+        ];
+        let msgIndex = 0;
+        const msgBox = document.getElementById('dynamicMessage');
+        
+        setInterval(() => {
+            msgBox.style.opacity = 0;
+            setTimeout(() => {
+                msgIndex = (msgIndex + 1) % messages.length;
+                msgBox.innerText = messages[msgIndex];
+                msgBox.style.opacity = 1;
+            }, 500); // Wait for fade out
+        }, 4000); // Change every 4 seconds
+
+        // 5. Modal and Animations
+        const modal = document.getElementById("surpriseModal");
+        
+        function showSurprise(title, text, animationType) {
+            document.getElementById("modalTitle").innerText = title;
+            document.getElementById("modalText").innerText = text;
+            modal.style.display = "flex";
+
+            // Trigger Canvas Confetti based on type
+            if (animationType === 'confetti') {
+                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#D48C81', '#FFF5F5', '#4A3026'] });
+            } else if (animationType === 'stars') {
+                var defaults = { spread: 360, ticks: 50, gravity: 0, decay: 0.94, startVelocity: 30, colors: ['#FFE400', '#FFBD00', '#E89400', '#FFCA6C', '#FDFFB8'] };
+                function shoot() {
+                    confetti({ ...defaults, particleCount: 40, scalar: 1.2, shapes: ['star'] });
+                    confetti({ ...defaults, particleCount: 10, scalar: 0.75, shapes: ['circle'] });
+                }
+                setTimeout(shoot, 0);
+                setTimeout(shoot, 100);
+                setTimeout(shoot, 200);
+            } else if (animationType === 'balloons' || animationType === 'gifts') {
+                // simple continuous confetti for 2 seconds
+                var duration = 2 * 1000;
+                var animationEnd = Date.now() + duration;
+                var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+                var interval = setInterval(function() {
+                    var timeLeft = animationEnd - Date.now();
+                    if (timeLeft <= 0) { return clearInterval(interval); }
+                    var particleCount = 50 * (timeLeft / duration);
+                    confetti({ ...defaults, particleCount, origin: { x: Math.random(), y: Math.random() - 0.2 } });
+                }, 250);
+            }
+        }
+
+        function closeModal() {
+            modal.style.display = "none";
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>
